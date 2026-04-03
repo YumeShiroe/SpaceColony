@@ -76,6 +76,18 @@ public abstract class CrewMember {
         return reducedDamage;
     }
 
+    public void useEnergy(int amount) {
+        energy -= amount;
+
+        if (energy < 0) {
+            energy = 0;
+        }
+    }
+
+    public boolean enoughEnergyForMission(int amount) {
+        return energy >= amount;
+    }
+
     // general method for crew member
     public abstract int getHealthGrowth();
     public abstract int getEnergyGrowth();
