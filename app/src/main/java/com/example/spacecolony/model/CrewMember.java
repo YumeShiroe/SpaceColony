@@ -36,7 +36,7 @@ public abstract class CrewMember {
     public void gainExperience(int amount) {
         experience += amount;
 
-        if (experience > nextLevelExperience) {
+        if (experience >= nextLevelExperience) {
             experience -= nextLevelExperience;
             levelUp();
         }
@@ -44,6 +44,7 @@ public abstract class CrewMember {
 
     public void levelUp() {
         level++;
+        skillPoints++;
         nextLevelExperience += 5;
 
         maxHealth += getHealthGrowth();
@@ -56,7 +57,7 @@ public abstract class CrewMember {
         defensePower += getDefenseGrowth();
     }
 
-    publc int act() {
+    public int act() {
         return attackPower;
     }
 
