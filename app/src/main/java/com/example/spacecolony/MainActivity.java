@@ -1,17 +1,29 @@
 package com.example.spacecolony;
 
+import com.example.spacecolony.model.Engineer;
+import com.example.spacecolony.model.Medic;
+import com.example.spacecolony.model.Pilot;
+import com.example.spacecolony.model.Scientist;
+import com.example.spacecolony.model.Soldier;
+import com.example.spacecolony.model.Team;
+import com.example.spacecolony.model.Mission;
+
 public class MainActivity {
     public static void main(String[] args) {
-        Colony team = new Colony();
+        Team team = new Team();
 
-        CrewMember member1 = new CrewMember("Alice", Role.Pilot);
-        CrewMember member2 = new CrewMember("Bob", Role.Engineer);
-        CrewMember member3 = new CrewMember("Clara", Role.Medic);
+        team.addMember(new Pilot("Alice"));
+        team.addMember(new Engineer("Bob"));
+        team.addMember(new Medic("Clara"));
+        team.addMember(new Scientist("David"));
+        team.addMember(new Soldier("Ethan"));
 
-        team.addCrewMember(member1);
-        team.addCrewMember(member2);
-        team.addCrewMember(member3);
+        team.showTeam();
 
-        team.displayCrewMembers();
+        Mission mission = new Mission("Repair Satellite", 2, 5, 10);
+        mission.executeMission(team);
+
+        System.out.println("\nAfter mission:\n");
+        team.showTeam();
     }
 }
