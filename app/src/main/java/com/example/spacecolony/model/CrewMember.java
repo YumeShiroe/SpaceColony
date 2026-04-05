@@ -15,6 +15,7 @@ public abstract class CrewMember {
 
     protected int attackPower;
     protected int defensePower;
+    protected int shield;
 
     public CrewMember(String name, int maxHealth, int maxEnergy, int attackPower, int defensePower) {
         this.name = name;
@@ -36,7 +37,7 @@ public abstract class CrewMember {
     public void gainExperience(int amount) {
         experience += amount;
 
-        if (experience >= nextLevelExperience) {
+        while (experience >= nextLevelExperience) {
             experience -= nextLevelExperience;
             levelUp();
         }
@@ -57,23 +58,42 @@ public abstract class CrewMember {
         defensePower += getDefenseGrowth();
     }
 
-    public int act() {
-        return attackPower;
+    public void act(Threat threat) {
+        System.out.println(name + " attacks " + threat.getName());
+        threat.takeDamage(attackPower);
     }
 
-    public int defend(int incomingAttackDamage) {
-        int reducedDamage = incomingAttackDamage - defensePower;
-        if (reducedDamage < 0) {
-            reducedDamage = 0;
+    public void defend() {
+        shield = defensePower;
+        System.out.println(name + " gains a shield of " + shield);
+    }
+
+    public void resetShield() {
+        shield = 0;
+        System.out.println(name + " loses shield");
+    }
+
+    public void takeDamage(int amount) {
+        // shield system: the damage is reduced by the shield value
+        // the remaining damage will affect the Crew Member health
+
+        int remainingDamage = amount;
+        if (shield > 0) {
+            if (shield >= remainingDamage) {
+                shield -= remainingDamage;
+                remainingDamage = 0;
+            } else {
+                remainingDamage -= shield;
+                shield = 0;
+            }
         }
 
-        health -= reducedDamage;
-
+        health -= remainingDamage;
         if (health < 0) {
             health = 0;
         }
 
-        return reducedDamage;
+        System.out.println(name + " takes " + remainingDamage + " damage.");
     }
 
     public void useEnergy(int amount) {
@@ -86,6 +106,10 @@ public abstract class CrewMember {
 
     public boolean enoughEnergyForMission(int amount) {
         return energy >= amount;
+    }
+
+    public boolean isDefeated() {
+        return health <= 0;
     }
 
     // general method for crew member
@@ -123,6 +147,16 @@ public abstract class CrewMember {
     public int getMaxEnergy() {
         return maxEnergy;
     }
+    public int getShield() {
+        return shield;
+    }
+    public int getAttackPower() {
+        return attackPower;
+    }
+    public int getDefensePower() {
+        return defensePower;
+    }
+
 
     @Override
     public String toString() {
