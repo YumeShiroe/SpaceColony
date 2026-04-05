@@ -15,11 +15,11 @@ public class CrewDatabase {
     private Random random;
 
     private String[] possibleNames = {
-            "Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Henry", "Ivy", "Jack"
+            "Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Henry", "Ivy", "Jack", "Ethan"
     };
     public CrewDatabase() {
         crewList = new ArrayList<>();
-        Random random = new Random();
+        random = new Random();
         loadDefaultCrewList();
     }
 
