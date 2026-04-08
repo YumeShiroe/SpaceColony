@@ -6,9 +6,11 @@ import com.example.spacecolony.model.Pilot;
 import com.example.spacecolony.model.Soldier;
 import com.example.spacecolony.model.Scientist;
 import com.example.spacecolony.model.Engineer;
+import com.example.spacecolony.model.Team;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class CrewDatabase {
     private ArrayList<CrewMember> crewList;
@@ -46,6 +48,13 @@ public class CrewDatabase {
         }
         return null;
     }
+
+    public void displayCrewMemberList() {
+        System.out.println("Crew List:");
+        for (CrewMember member: crewList) {
+            System.out.println(member.getName());
+        }
+    }
     public void addCrewMember(CrewMember member) {
         crewList.add(member);
     }
@@ -57,8 +66,8 @@ public class CrewDatabase {
     }
     public void displayCrewList() {
         System.out.println("Crew List:");
-        for (CrewMember member : crewList) {
-            System.out.println(member.getName());
+        for (int i = 0; i < crewList.size(); i++) {
+            System.out.println((i + 1) + ". " + crewList.get(i).getName());
         }
     }
 
@@ -99,8 +108,34 @@ public class CrewDatabase {
                     break;
                 }
             }
-        } while (!isUnique); {
-            return randomName;
+        } while (!isUnique);
+        return randomName;
+    }
+
+    public Team createTeam() {
+        Team team = new Team();
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Team Selection:");
+
+        while (team.getTeamSize() < 2) {
+            displayCrewMemberList();
+            System.out.println("Selected: " + team.getTeamSize() + "/2");
+            System.out.println("Select a crew member (1-" + crewList.size() + "): ");
+            int choice = sc.nextInt();
+
+            if (choice < 1 || choice > crewList.size()) {
+                System.out.println("Invalid choice. Please choose again!");
+                continue;
+            }
+
+            if (team.contains(crewList.get(choice - 1))) {
+                System.out.println("Crew member is already in the team.");
+                continue;
+            }
+            team.addMember(crewList.get(choice - 1));
+            System.out.println(crewList.get(choice - 1).getName() + " is added to the team.\n");
         }
+        return team;
     }
 }
