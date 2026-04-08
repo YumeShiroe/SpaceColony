@@ -55,7 +55,7 @@ public class Mission {
         } else if (choice == 2) {
             member.defend();
         } else {
-            System.out.println("Invalid action. The member will use shield");
+            System.out.println("Invalid action. This member will use shield");
             member.defend();
         }
     }
@@ -84,20 +84,38 @@ public class Mission {
         }
     }
 
-    public void startBattle(CrewMember member1, CrewMember member2) {
+    public void startBattle(Team team) {
+        if (team == null || team.getTeamSize() < 2) {
+            System.out.println("The mission requires at least 2 crew members.");
+            return;
+        }
+
+        CrewMember member1 = team.getMembers().get(0);
+        CrewMember member2 = team.getMembers().get(1);
+
         if (!member1.enoughEnergyForMission(energyCost)) {
-            System.out.println(member1.getName() + " does not have enough energy to join the mission.");
+            System.out.println(member1.getName() + " is tired and cannot participate in the mission.");
             return;
         }
         if (!member2.enoughEnergyForMission(energyCost)) {
-            System.out.println(member2.getName() + " does not have enough energy to join the mission.");
+            System.out.println(member2.getName() + " is tired and cannot participate in the mission.");
             return;
         }
 
         member1.useEnergy(energyCost);
         member2.useEnergy(energyCost);
 
+        // Mission info
         assignThreat();
+        System.out.println("Mission started: " + name);
+        System.out.println("DifficultyL " + difficulty);
+        System.out.println("Energy Cost: " + energyCost);
+        System.out.println("Reward: " + rewardXP + "XP");
+        System.out.println("Team Members:");
+        System.out.println("+ " + member1.getName());
+        System.out.println("+ " + member2.getName());
+        System.out.println("A wild " + threat.getName() + " appeared! (Cannot catch em all here tho)");
+
         Scanner sc = new Scanner(System.in);
 
         while (!isThreatDefeated() && !isCrewDefeated(member1, member2)) {
@@ -111,7 +129,6 @@ public class Mission {
             if (isThreatDefeated()) {
                 break;
             }
-
             threatTurn(member1, member2);
 
             member1.resetShield();
@@ -122,16 +139,21 @@ public class Mission {
 
         if (isThreatDefeated()) {
             System.out.println(threat.getName() + " has been defeated!");
+            System.out.println("Mission completed!");
+
             if (!member1.isDefeated()) {
                 member1.gainExperience(rewardXP);
+                System.out.println(member1.getName() + " gained " + rewardXP + "XP");
             }
             if (!member2.isDefeated()) {
                 member2.gainExperience(rewardXP);
+                System.out.println(member2.getName() + " gained " + rewardXP + "XP");
             }
         } else {
-            System.out.println(member1.getName() + " and " + member2.getName() + " have been defeated!");
-            System.out.println("Mission failed");
+            System.out.println(member1.getName() + " and " + member2.getName() + " has been defeated!");
+            System.out.println("Mission failed :(");
         }
+
     }
 
     // getters
