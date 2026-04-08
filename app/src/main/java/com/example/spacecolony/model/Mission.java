@@ -33,8 +33,8 @@ public class Mission {
 
     public void battleStatus(CrewMember member1, CrewMember member2) {
         System.out.println("_____Battle Status_____");
-        System.out.println(member1.getName() + " HP: " + member1.getHealth() + "/" + member1.getMaxHealth() + " | Shield" + member1.getShield());
-        System.out.println(member2.getName() + " HP: " + member2.getHealth() + "/" + member2.getMaxHealth() + " | Shield" + member2.getShield());
+        System.out.println(member1.getName() + " HP: " + member1.getHealth() + "/" + member1.getMaxHealth() + " | Shield:" + member1.getShield());
+        System.out.println(member2.getName() + " HP: " + member2.getHealth() + "/" + member2.getMaxHealth() + " | Shield:" + member2.getShield());
         System.out.println(threat.getName() + " HP: " + threat.getHealth());
         System.out.println();
     }
@@ -85,7 +85,7 @@ public class Mission {
     }
 
     public void startBattle(Team team) {
-        if (team == null || team.getTeamSize() < 2) {
+        if (team == null || team.getTeamSize() != 2) {
             System.out.println("The mission requires at least 2 crew members.");
             return;
         }
@@ -108,7 +108,7 @@ public class Mission {
         // Mission info
         assignThreat();
         System.out.println("Mission started: " + name);
-        System.out.println("DifficultyL " + difficulty);
+        System.out.println("Difficulty: " + difficulty);
         System.out.println("Energy Cost: " + energyCost);
         System.out.println("Reward: " + rewardXP + "XP");
         System.out.println("Team Members:");
