@@ -15,6 +15,7 @@ import java.util.Scanner;
 public class CrewDatabase {
     private ArrayList<CrewMember> crewList;
     private Random random;
+    private static CrewDatabase instance;
 
     private String[] possibleNames = {
             "Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Henry", "Ivy", "Jack", "Ethan"
@@ -23,6 +24,13 @@ public class CrewDatabase {
         crewList = new ArrayList<>();
         random = new Random();
         loadDefaultCrewList();
+    }
+
+    public static CrewDatabase getInstance() {
+        if (instance == null) {
+            instance = new CrewDatabase();
+        }
+        return instance;
     }
 
     private void loadDefaultCrewList() {

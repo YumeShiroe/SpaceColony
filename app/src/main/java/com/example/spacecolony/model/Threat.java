@@ -12,6 +12,7 @@ public abstract class Threat {
     }
 
     public abstract void usingSkills(CrewMember target1, CrewMember target2);
+    public abstract String performTurn(CrewMember member1, CrewMember member2);
 
     public void attack(CrewMember target) {
         System.out.println(name + " attacks " + target.getName());

@@ -32,7 +32,7 @@ public class AdjustTeamMenu extends AppCompatActivity{
         textSelectedTeam = findViewById(R.id.textSelectedTeam);
         buttonAdjustTeam = findViewById(R.id.buttonAdjustTeam);
 
-        crewDatabase = new CrewDatabase();
+        crewDatabase = CrewDatabase.getInstance();
         crewList = crewDatabase.getCrewList();
         selectedCrew = new ArrayList<>();
 

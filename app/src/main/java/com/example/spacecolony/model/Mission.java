@@ -10,6 +10,10 @@ public class Mission {
     private int energyCost;
     private int rewardXP;
     private Threat threat;
+    private int turnCount;
+    private boolean isBattleStarted;
+    private CrewMember member1;
+    private CrewMember member2;
 
     public Mission(String name, int difficulty, int energyCost, int rewardXP) {
         this.name = name;
@@ -31,129 +35,145 @@ public class Mission {
         return member1.isDefeated() && member2.isDefeated();
     }
 
-    public void battleStatus(CrewMember member1, CrewMember member2) {
-        System.out.println("_____Battle Status_____");
-        System.out.println(member1.getName() + " HP: " + member1.getHealth() + "/" + member1.getMaxHealth() + " | Shield:" + member1.getShield());
-        System.out.println(member2.getName() + " HP: " + member2.getHealth() + "/" + member2.getMaxHealth() + " | Shield:" + member2.getShield());
-        System.out.println(threat.getName() + " HP: " + threat.getHealth());
-        System.out.println();
-    }
-
-    public void crewMemberTurn(CrewMember member, Scanner sc) {
-        if (member.isDefeated()) {
-            return;
-        }
-
-        System.out.println(member.getName() + "'s turn:");
-        System.out.println("1. Attack");
-        System.out.println("2. Defend");
-        System.out.println("Choose an action:");
-        int choice = sc.nextInt();
-
-        if (choice == 1) {
-            member.act(threat);
-        } else if (choice == 2) {
-            member.defend();
-        } else {
-            System.out.println("Invalid action. This member will use shield");
-            member.defend();
-        }
-    }
-
-    public void threatTurn(CrewMember member1, CrewMember member2) {
-        if (threat.isDefeated()) {
-            return;
-        }
-
-        System.out.println(threat.getName() + "'s turn:");
-
-        Random random = new Random();
-
-        if (!member1.isDefeated() && !member2.isDefeated()) {
-            int targetChoice = random.nextInt(2);
-
-            if (targetChoice == 0) {
-                threat.attack(member1);
-            } else if (targetChoice == 1) {
-                threat.attack(member2);
-            }
-        } else if (!member1.isDefeated()) {
-            threat.attack(member1);
-        } else if (!member2.isDefeated()) {
-            threat.attack(member2);
-        }
-    }
-
-    public void startBattle(Team team) {
+    public boolean startBattle(Team team) {
         if (team == null || team.getTeamSize() != 2) {
-            System.out.println("The mission requires at least 2 crew members.");
-            return;
+            return false;
         }
 
-        CrewMember member1 = team.getMembers().get(0);
-        CrewMember member2 = team.getMembers().get(1);
+        member1 = team.getMembers().get(0);
+        member2 = team.getMembers().get(1);
 
         if (!member1.enoughEnergyForMission(energyCost)) {
-            System.out.println(member1.getName() + " is tired and cannot participate in the mission.");
-            return;
+            return false;
         }
         if (!member2.enoughEnergyForMission(energyCost)) {
-            System.out.println(member2.getName() + " is tired and cannot participate in the mission.");
-            return;
+            return false;
         }
 
         member1.useEnergy(energyCost);
         member2.useEnergy(energyCost);
 
-        // Mission info
         assignThreat();
-        System.out.println("Mission started: " + name);
-        System.out.println("Difficulty: " + difficulty);
-        System.out.println("Energy Cost: " + energyCost);
-        System.out.println("Reward: " + rewardXP + "XP");
-        System.out.println("Team Members:");
-        System.out.println("+ " + member1.getName());
-        System.out.println("+ " + member2.getName());
-        System.out.println("A wild " + threat.getName() + " appeared! (Cannot catch em all here tho)");
+        turnCount = 1;
+        isBattleStarted = true;
+        return true;
+    }
 
-        Scanner sc = new Scanner(System.in);
-
-        while (!isThreatDefeated() && !isCrewDefeated(member1, member2)) {
-            battleStatus(member1, member2);
-
-            crewMemberTurn(member1, sc);
-            if (isThreatDefeated()) {
-                break;
-            }
-            crewMemberTurn(member2, sc);
-            if (isThreatDefeated()) {
-                break;
-            }
-            threatTurn(member1, member2);
-
-            member1.resetShield();
-            member2.resetShield();
+    public String playerAttack() {
+        if (!isBattleStarted) {
+            return "Battle not started";
         }
 
-        battleStatus(member1, member2);
+        CrewMember currentMember;
 
-        if (isThreatDefeated()) {
-            System.out.println(threat.getName() + " has been defeated!");
-            System.out.println("Mission completed!");
-
-            if (!member1.isDefeated()) {
-                member1.gainExperience(rewardXP);
-                System.out.println(member1.getName() + " gained " + rewardXP + "XP");
-            }
-            if (!member2.isDefeated()) {
-                member2.gainExperience(rewardXP);
-                System.out.println(member2.getName() + " gained " + rewardXP + "XP");
-            }
+        if (isMember1Turn()) {
+            currentMember = member1;
+        } else if (isMember2Turn()) {
+            currentMember = member2;
         } else {
-            System.out.println(member1.getName() + " and " + member2.getName() + " has been defeated!");
-            System.out.println("Mission failed :(");
+            return "It's not your turn";
+        }
+        if (currentMember.isDefeated()) {
+            String battleLog = "This member is defeated and cannot act.";
+            turnCount++;
+            return battleLog;
+        }
+        currentMember.act(threat);
+        String battleLog = currentMember.getName() + " attacks " + threat.getName();
+
+        if (threat.isDefeated()) {
+            dropReward();
+            return battleLog + "\nThreat Defeated! Mission Completed!";
+        }
+        turnCount++;
+        return battleLog;
+    }
+
+    public String playerDefend() {
+        if (!isBattleStarted) {
+            return "Battle not started";
         }
 
+        CrewMember currentMember;
+
+        if (isMember1Turn()) {
+            currentMember = member1;
+        } else if (isMember2Turn()) {
+            currentMember = member2;
+        } else {
+            return "It's not your turn";
+        }
+
+        if (currentMember.isDefeated()) {
+            String battleLog =  "This member is defeated and cannot defend.";
+            turnCount++;
+            return battleLog;
+        }
+        currentMember.defend();
+        String battleLog = currentMember.getName() + " defends";
+        turnCount++;
+        return battleLog;
+    }
+
+    public String playerSkill() {
+        if (!isBattleStarted) {
+            return "Battle not started";
+        }
+
+        CrewMember currentMember;
+        if (isMember1Turn()) {
+            currentMember = member1;
+        } else if (isMember2Turn()) {
+            currentMember = member2;
+        } else {
+            return "It's not your turn";
+        }
+        if (currentMember.isDefeated()) {
+            String battleLog =  "This member is defeated and cannot use skill.";
+            turnCount++;
+            return battleLog;
+        }
+        currentMember.act(threat);
+        String battleLog = currentMember.getName() + " uses skill on " + threat.getName();
+
+        if (threat.isDefeated()) {
+            dropReward();
+            return battleLog + "\nThreat Defeated! Mission Completed!";
+        }
+        turnCount++;
+        return battleLog;
+    }
+
+    public String threatTurn() {
+        if (!isBattleStarted) {
+            return "Battle not started";
+        }
+        if (!isThreatTurn()) {
+            return "It's not threat's turn";
+        }
+        if (threat.isDefeated()) {
+            dropReward();
+            return threat.getName() + " Defeated! Mission Completed!";
+        }
+        String battleLog = threat.performTurn(member1, member2);
+
+        member1.resetShield();
+        member2.resetShield();
+
+        if (isCrewDefeated(member1, member2)) {
+            return battleLog + "\nCrew Defeated! Mission Failed!";
+        }
+        turnCount++;
+        return battleLog;
+    }
+
+    private void dropReward() {
+        if (!member1.isDefeated()) {
+            member1.gainExperience(rewardXP);
+        }
+        if (!member2.isDefeated()) {
+            member2.gainExperience(rewardXP);
+        }
     }
 
     // getters
@@ -172,6 +192,33 @@ public class Mission {
 
     public Threat getThreat() {
         return threat;
+    }
+    public CrewMember getMember1() {
+        return member1;
+    }
+    public CrewMember getMember2() {
+        return member2;
+    }
+    public int getTurnCount() {
+        return turnCount;
+    }
+    public boolean isMember1Turn() {
+        return turnCount % 3 == 1;
+    }
+    public boolean isMember2Turn() {
+        return turnCount % 3 == 2;
+    }
+    public boolean isThreatTurn() {
+        return turnCount % 3 == 0;
+    }
+    public String getCurrentTurn() {
+        if (isMember1Turn()) {
+            return member1.getName() + "'s turn";
+        } else if (isMember2Turn()) {
+            return member2.getName() + "'s turn";
+        } else {
+            return threat.getName() + "'s turn";
+        }
     }
 }
 

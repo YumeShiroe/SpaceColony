@@ -17,7 +17,7 @@ public class MaxwellThreat extends Threat{
         super.attack(target);
     }
 
-    public void loaf(CrewMember target1, CrewMember target2) {
+    public String loaf(CrewMember target1, CrewMember target2) {
         System.out.println(name + " decides to loaf! It hits everyone!");
         if (!target1.isDefeated()) {
             target1.takeDamage(attackPower - 2);
@@ -27,29 +27,33 @@ public class MaxwellThreat extends Threat{
         }
 
         loafCoolDown = 3;
+        return name + " uses loaf skill!!!";
     }
     @Override
     public void usingSkills(CrewMember target1, CrewMember target2) {
+        performTurn(target1, target2);
+    }
+
+    @Override
+    public String performTurn(CrewMember target1, CrewMember target2) {
         if (loafCoolDown > 0) {
             loafCoolDown--;
         }
-
         if (loafCoolDown == 0) {
             int loafSkillChance = random.nextInt(100);
 
             if (loafSkillChance < 40) {
-                loaf(target1, target2);
-                return;
+                return loaf(target1, target2);
             }
         }
 
         CrewMember target = chooseTarget(target1, target2);
 
         if (target != null) {
-            attack(target);
+            return name + " carefully rips" + target.getName() + " with its claws.";
         }
+        return name + " has no valid target";
     }
-
     private CrewMember chooseTarget(CrewMember target1, CrewMember target2) {
         if (!target1.isDefeated() && !target2.isDefeated()) {
             int choice = random.nextInt(2);
