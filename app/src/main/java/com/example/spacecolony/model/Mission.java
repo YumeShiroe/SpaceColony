@@ -9,17 +9,19 @@ public class Mission {
     private int difficulty;
     private int energyCost;
     private int rewardXP;
+    private int rewardCredit;
     private Threat threat;
     private int turnCount;
     private boolean isBattleStarted;
     private CrewMember member1;
     private CrewMember member2;
 
-    public Mission(String name, int difficulty, int energyCost, int rewardXP) {
+    public Mission(String name, int difficulty, int energyCost, int rewardXP, int rewardCredit) {
         this.name = name;
         this.difficulty = difficulty;
         this.energyCost = energyCost;
         this.rewardXP = rewardXP;
+        this.rewardCredit = rewardCredit;
     }
 
     // Temporary threat
@@ -174,6 +176,9 @@ public class Mission {
         if (!member2.isDefeated()) {
             member2.gainExperience(rewardXP);
         }
+        if (!member1.isDefeated() && !member2.isDefeated()) {
+
+        }
     }
 
     public boolean retryBattleWithNewTeam(CrewMember newMember1, CrewMember newMember2) {
@@ -213,6 +218,9 @@ public class Mission {
     }
     public int getRewardXP() {
         return rewardXP;
+    }
+    public int getRewardCredit() {
+        return rewardCredit;
     }
 
     public Threat getThreat() {

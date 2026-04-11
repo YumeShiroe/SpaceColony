@@ -161,6 +161,10 @@ public class CrewDatabase {
         return team;
     }
 
+    public void addCredit(int amount) {
+        credits += amount;
+    }
+
     public int getCredits() {
         return credits;
     }
