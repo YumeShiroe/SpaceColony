@@ -11,16 +11,22 @@ public class Soldier extends CrewMember {
     }
     @Override
     public int getEnergyGrowth() {
-        return 3;
+        return 4;
     }
 
     @Override
-    public int getDefenseGrowth() { return 2; }
+    public int getDefenseGrowth() { return 3; }
     @Override
     public int getAttackGrowth() { return 3; }
 
     @Override
     public String getRoleName() {
         return "Soldier";
+    }
+    @Override
+    public String useSkill(Threat threat, CrewMember ally) {
+        shield += defensePower;
+        threat.takeDamage(attackPower + shield - 3);
+        return name + " utilized close quarter combat. Soldier gains " + defensePower + " shield and deals " + attackPower + " damage";
     }
 }

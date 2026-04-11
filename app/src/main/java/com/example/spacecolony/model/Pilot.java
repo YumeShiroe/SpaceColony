@@ -22,4 +22,10 @@ public class Pilot extends CrewMember {
     public String getRoleName() {
         return "Pilot";
     }
+    @Override
+    public String useSkill(Threat threat, CrewMember ally) {
+        int skillDamage = attackPower + 5;
+        threat.takeDamage(skillDamage);
+        return name + " uses bombardment!!" + threat.getName() + " takes " + skillDamage + " damage.";
+    }
 }

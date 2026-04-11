@@ -22,4 +22,13 @@ public class Scientist extends CrewMember {
     public String getRoleName() {
         return "Scientist";
     }
+    @Override
+    public String useSkill(Threat threat, CrewMember ally) {
+        threat.attackPower -= 2;
+
+        if (threat.attackPower < 2) {
+            threat.attackPower = 2;
+        }
+        return name + " has analyzed the threat's attack pattern and lower it attack power to " + threat.attackPower + "!";
+    }
 }

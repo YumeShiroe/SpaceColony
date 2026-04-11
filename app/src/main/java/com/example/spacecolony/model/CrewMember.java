@@ -16,7 +16,8 @@ public abstract class CrewMember {
     protected int attackPower;
     protected int defensePower;
     protected int shield;
-    private boolean isDead;
+    protected boolean isDead;
+    protected int skillCooldown;
 
     public CrewMember(String name, int maxHealth, int maxEnergy, int attackPower, int defensePower) {
         this.name = name;
@@ -33,6 +34,8 @@ public abstract class CrewMember {
 
         this.attackPower = attackPower;
         this.defensePower = defensePower;
+
+        this.skillCooldown = 0;
 
         this.isDead = false;
     }
@@ -117,6 +120,20 @@ public abstract class CrewMember {
         energy = maxEnergy;
     }
 
+    public abstract String useSkill(Threat threat, CrewMember ally);
+
+    public boolean canUseSkill() {
+        return skillCooldown == 0;
+    }
+    public void reduceSkillCooldown() {
+        if (skillCooldown > 0) {
+            skillCooldown--;
+        }
+    }
+    public void enableSkillCooldown() {
+        skillCooldown = 2;
+    }
+
     public boolean enoughEnergyForMission(int amount) {
         return energy >= amount;
     }
@@ -171,6 +188,9 @@ public abstract class CrewMember {
     }
     public boolean isDead() {
         return isDead;
+    }
+    public int getSKillCooldown() {
+        return skillCooldown;
     }
 
 

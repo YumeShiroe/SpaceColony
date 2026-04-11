@@ -107,6 +107,7 @@ public class Mission {
         }
         currentMember.act(threat);
         String battleLog = currentMember.getName() + " attacks " + threat.getName();
+        currentMember.reduceSkillCooldown();
 
         if (threat.isDefeated()) {
             dropReward();
@@ -138,6 +139,8 @@ public class Mission {
         }
         currentMember.defend();
         String battleLog = currentMember.getName() + " defends";
+        currentMember.reduceSkillCooldown();
+
         turnCount++;
         return battleLog;
     }
@@ -148,10 +151,13 @@ public class Mission {
         }
 
         CrewMember currentMember;
+        CrewMember allyMember;
         if (isMember1Turn()) {
             currentMember = member1;
+            allyMember = member2;
         } else if (isMember2Turn()) {
             currentMember = member2;
+            allyMember = member1;
         } else {
             return "It's not your turn";
         }
@@ -160,8 +166,13 @@ public class Mission {
             turnCount++;
             return battleLog;
         }
-        currentMember.act(threat);
-        String battleLog = currentMember.getName() + " uses skill on " + threat.getName();
+
+        if (!currentMember.canUseSkill()) {
+            return currentMember.getName() + "'s skill is on cooldown for " + currentMember.getSKillCooldown() + " turn(s).";
+        }
+
+        String battleLog = currentMember.useSkill(threat, allyMember);
+        currentMember.enableSkillCooldown();
 
         if (threat.isDefeated()) {
             dropReward();
