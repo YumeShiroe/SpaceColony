@@ -42,8 +42,8 @@ public class AdjustTeamMenu extends AppCompatActivity{
             }
         }
 
-        if (crewList.isEmpty()) {
-            Toast.makeText(this, "No available crew members", Toast.LENGTH_SHORT).show();
+        if (crewList.size() < 2) {
+            Toast.makeText(this, "You don't have enough crew member to form a team!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(AdjustTeamMenu.this, MainMenu.class);
             startActivity(intent);
             finish();

@@ -176,6 +176,31 @@ public class Mission {
         }
     }
 
+    public boolean retryBattleWithNewTeam(CrewMember newMember1, CrewMember newMember2) {
+        if (newMember1 == null || newMember2 == null) {
+            return false;
+        }
+        if (newMember1.isDead() || newMember2.isDead()) {
+            return false;
+        }
+        member1 = newMember1;
+        member2 = newMember2;
+
+        if (!member1.enoughEnergyForMission(energyCost)) {
+            return false;
+        }
+        if (!member2.enoughEnergyForMission(energyCost)) {
+            return false;
+        }
+        member1.useEnergy(energyCost);
+        member2.useEnergy(energyCost);
+
+        assignThreat();
+        turnCount = 1;
+        isBattleStarted = true;
+        return true;
+    }
+
     // getters
     public String getName() {
         return name;

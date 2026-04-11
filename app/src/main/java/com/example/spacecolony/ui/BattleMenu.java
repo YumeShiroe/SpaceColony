@@ -10,6 +10,9 @@ import com.example.spacecolony.R;
 import com.example.spacecolony.model.CrewMember;
 import com.example.spacecolony.model.Mission;
 import com.example.spacecolony.model.Threat;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import com.example.spacecolony.data.CrewDatabase;
 
 public class BattleMenu extends AppCompatActivity{
     private TextView textBattleStatus;
@@ -21,6 +24,7 @@ public class BattleMenu extends AppCompatActivity{
     private Button buttonNextOrRetry;
     public static Mission currentMission;
     private boolean isPlayerWon = false;
+    private boolean adjustedTeamReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,7 @@ public class BattleMenu extends AppCompatActivity{
         });
         buttonAdjustTeamEnd.setOnClickListener(v -> {
             Intent intent = new Intent(BattleMenu.this, AdjustTeamMenu.class);
-            startActivity(intent);
+            adjustTeamLauncher.launch(intent);
         });
         buttonNextOrRetry.setOnClickListener(v -> {
             if (isPlayerWon) {
@@ -73,9 +77,23 @@ public class BattleMenu extends AppCompatActivity{
                 startActivity(intent);
                 finish();
             } else {
-                Intent intent = new Intent(BattleMenu.this, AdjustTeamMenu.class);
-                startActivity(intent);
-                finish();
+                if (adjustedTeamReady) {
+                    buttonAttack.setEnabled(true);
+                    buttonDefend.setEnabled(true);
+                    buttonSkill.setEnabled(true);
+                    buttonAdjustTeamEnd.setVisibility(View.GONE);
+                    buttonNextOrRetry.setVisibility(View.GONE);
+
+                    textBattleStatus.setText(
+                            currentMission.getMember1().getName() + " and " +
+                            currentMission.getMember2().getName() + " VS " +
+                            currentMission.getThreat().getName()
+                    );
+                    updateStatus();
+                    adjustedTeamReady = false;
+                } else {
+                    textBattleStatus.setText("Please adjust your team first!");
+                }
             }
         });
     }
@@ -117,6 +135,27 @@ public class BattleMenu extends AppCompatActivity{
             return;
         }
     }
+
+    private final ActivityResultLauncher<Intent> adjustTeamLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == RESULT_OK && result.getData() !=  null) {
+            String crewName1 = result.getData().getStringExtra("crew1");
+            String crewName2 = result.getData().getStringExtra("crew2");
+            CrewDatabase crewDatabase = CrewDatabase.getInstance();
+            CrewMember member1 = crewDatabase.getCrewMemberByName(crewName1);
+            CrewMember member2 = crewDatabase.getCrewMemberByName(crewName2);
+
+            boolean retrySuccess = currentMission.retryBattleWithNewTeam(member1, member2);
+
+            if (retrySuccess) {
+                adjustedTeamReady = true;
+                isPlayerWon = false;
+                textBattleStatus.setText("New Team Adjusted! Retry mission to continue our journey!");
+                updateStatus();
+            } else {
+                textBattleStatus.setText("Failed to adjust team. Please try again.");
+            }
+        }
+    });
 
     private void updateStatus() {
         if (currentMission == null) {
