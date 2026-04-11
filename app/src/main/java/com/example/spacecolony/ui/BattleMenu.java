@@ -13,6 +13,7 @@ import com.example.spacecolony.model.Threat;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import com.example.spacecolony.data.CrewDatabase;
+import java.util.Random;
 
 public class BattleMenu extends AppCompatActivity{
     private TextView textBattleStatus;
@@ -126,6 +127,7 @@ public class BattleMenu extends AppCompatActivity{
             currentMission.getMember1().gainExperience(currentMission.getRewardXP());
             currentMission.getMember2().gainExperience(currentMission.getRewardXP());
             CrewDatabase.getInstance().addCredit(currentMission.getRewardCredit());
+            currentMission.increaseDifficulty();
             textBattleStatus.setText(battleLog + "\nMission Completed!" + "\n+" + currentMission.getRewardXP() + " XP" + "\n+" + currentMission.getRewardCredit() + " Credits");
             return;
         } else if (currentMission.getMember1().isDefeated() && currentMission.getMember2().isDefeated()) {

@@ -26,7 +26,30 @@ public class Mission {
 
     // Temporary threat
     public void assignThreat() {
-        threat = new AlienThreat(difficulty);
+        Random random = new Random();
+        if (difficulty >= 3) {
+            threat = new GalaticBanditBoss(difficulty);
+            return;
+        }
+        int rand = random.nextInt(5);
+
+        if (rand == 0) {
+            threat = new AlienThreat(difficulty);
+        } else if (rand == 1) {
+            threat = new GalaticBandit(difficulty);
+        } else if (rand == 2) {
+            threat = new GolemThreat(difficulty);
+        } else if (rand == 3) {
+            threat = new LesserSandstorm(difficulty);
+        } else {
+            threat = new MaxwellThreat(difficulty);
+        }
+    }
+
+    public void increaseDifficulty() {
+        if (difficulty < 3) {
+            difficulty++;
+        }
     }
     // Starting mission: Crew member need a specific amount of energy to join the mission
     public boolean isThreatDefeated() {

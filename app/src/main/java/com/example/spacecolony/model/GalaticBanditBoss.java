@@ -121,7 +121,7 @@ public class GalaticBanditBoss extends Threat {
         CrewMember target = chooseTarget(target1, target2);
 
         if (target != null) {
-            return name + " strikes" + target.getName() + " with its hand.";
+            return name + " pierces " + target.getName() + " with her bayonet.";
         }
         return name + " has no valid target";
     }
