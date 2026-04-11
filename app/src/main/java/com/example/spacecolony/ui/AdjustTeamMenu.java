@@ -33,8 +33,14 @@ public class AdjustTeamMenu extends AppCompatActivity{
         buttonAdjustTeam = findViewById(R.id.buttonAdjustTeam);
 
         crewDatabase = CrewDatabase.getInstance();
-        crewList = crewDatabase.getCrewList();
         selectedCrew = new ArrayList<>();
+        crewList = new ArrayList<>();
+
+        for (CrewMember member : crewDatabase.getCrewList()) {
+            if (!member.isDead()) {
+                crewList.add(member);
+            }
+        }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

@@ -122,7 +122,7 @@ public abstract class CrewMember {
     }
 
     public boolean isDefeated() {
-        return health <= 0;
+        return isDead || health <= 0;
     }
 
     // general method for crew member

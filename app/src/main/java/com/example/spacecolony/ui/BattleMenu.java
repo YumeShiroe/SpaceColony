@@ -1,6 +1,8 @@
 package com.example.spacecolony.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +17,10 @@ public class BattleMenu extends AppCompatActivity{
     private Button buttonDefend;
     private Button buttonSkill;
     private TextView textStatus;
+    private Button buttonAdjustTeamEnd;
+    private Button buttonNextOrRetry;
     public static Mission currentMission;
+    private boolean isPlayerWon = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,8 @@ public class BattleMenu extends AppCompatActivity{
         buttonDefend = findViewById(R.id.buttonDefend);
         buttonSkill = findViewById(R.id.buttonSkill);
         textStatus = findViewById(R.id.textStatus);
+        buttonAdjustTeamEnd = findViewById(R.id.buttonAdjustTeamEnd);
+        buttonNextOrRetry = findViewById(R.id.buttonNextOrRetry);
 
         if (currentMission == null) {
             textBattleStatus.setText("No mission selected");
@@ -35,6 +42,10 @@ public class BattleMenu extends AppCompatActivity{
             buttonSkill.setEnabled(false);
             return;
         }
+
+        buttonAdjustTeamEnd.setVisibility(View.GONE);
+        buttonNextOrRetry.setVisibility(View.GONE);
+
         textBattleStatus.setText(
                 currentMission.getMember1().getName() + " and " +
                 currentMission.getMember2().getName() + " VS " +
@@ -51,6 +62,21 @@ public class BattleMenu extends AppCompatActivity{
         });
         buttonSkill.setOnClickListener(v -> {
             handleAction("Skill");
+        });
+        buttonAdjustTeamEnd.setOnClickListener(v -> {
+            Intent intent = new Intent(BattleMenu.this, AdjustTeamMenu.class);
+            startActivity(intent);
+        });
+        buttonNextOrRetry.setOnClickListener(v -> {
+            if (isPlayerWon) {
+                Intent intent = new Intent(BattleMenu.this, MissionMenu.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent = new Intent(BattleMenu.this, AdjustTeamMenu.class);
+                startActivity(intent);
+                finish();
+            }
         });
     }
 
@@ -77,7 +103,15 @@ public class BattleMenu extends AppCompatActivity{
         textBattleStatus.setText(battleLog);
         updateStatus();
 
-        if (currentMission.getThreat().isDefeated() || (currentMission.getMember1().isDefeated() && currentMission.getMember2().isDefeated())) {
+        if (currentMission.getThreat().isDefeated()) {
+            textBattleStatus.setText(battleLog + "\nMission Completed!");
+            buttonAttack.setEnabled(false);
+            buttonDefend.setEnabled(false);
+            buttonSkill.setEnabled(false);
+        } else if (currentMission.getMember1().isDefeated() && currentMission.getMember2().isDefeated()) {
+            currentMission.getMember1().die();
+            currentMission.getMember2().die();
+            textBattleStatus.setText(battleLog + "\nMission Failed!");
             buttonAttack.setEnabled(false);
             buttonDefend.setEnabled(false);
             buttonSkill.setEnabled(false);
