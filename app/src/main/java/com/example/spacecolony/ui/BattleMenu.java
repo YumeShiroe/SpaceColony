@@ -104,17 +104,17 @@ public class BattleMenu extends AppCompatActivity{
         updateStatus();
 
         if (currentMission.getThreat().isDefeated()) {
+            isPlayerWon = true;
             textBattleStatus.setText(battleLog + "\nMission Completed!");
-            buttonAttack.setEnabled(false);
-            buttonDefend.setEnabled(false);
-            buttonSkill.setEnabled(false);
+            showEndButtons(true);
+            return;
         } else if (currentMission.getMember1().isDefeated() && currentMission.getMember2().isDefeated()) {
             currentMission.getMember1().die();
             currentMission.getMember2().die();
+            isPlayerWon = false;
             textBattleStatus.setText(battleLog + "\nMission Failed!");
-            buttonAttack.setEnabled(false);
-            buttonDefend.setEnabled(false);
-            buttonSkill.setEnabled(false);
+            showEndButtons(false);
+            return;
         }
     }
 
@@ -128,5 +128,18 @@ public class BattleMenu extends AppCompatActivity{
                 currentMission.getMember2().getName() + " HP: " + currentMission.getMember2().getHealth() + "/" + currentMission.getMember2().getMaxHealth() + "\n" +
                 currentMission.getThreat().getName() + " HP: " + currentMission.getThreat().getHealth();
         textStatus.setText(status);
+    }
+
+    private void showEndButtons(boolean won) {
+        buttonAttack.setEnabled(false);
+        buttonDefend.setEnabled(false);
+        buttonSkill.setEnabled(false);
+        buttonAdjustTeamEnd.setVisibility(View.VISIBLE);
+        buttonNextOrRetry.setVisibility(View.VISIBLE);
+        if (won) {
+            buttonNextOrRetry.setText("Next Mission");
+        } else {
+            buttonNextOrRetry.setText("Retry Mission");
+        }
     }
 }
