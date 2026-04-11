@@ -123,8 +123,10 @@ public class BattleMenu extends AppCompatActivity{
 
         if (currentMission.getThreat().isDefeated()) {
             isPlayerWon = true;
-            textBattleStatus.setText(battleLog + "\nMission Completed!");
-            showEndButtons(true);
+            currentMission.getMember1().gainExperience(currentMission.getRewardXP());
+            currentMission.getMember2().gainExperience(currentMission.getRewardXP());
+            CrewDatabase.getInstance().addCredit(currentMission.getRewardCredit());
+            textBattleStatus.setText(battleLog + "\nMission Completed!" + "\n+" + currentMission.getRewardXP() + " XP" + "\n+" + currentMission.getRewardCredit() + " Credits");
             return;
         } else if (currentMission.getMember1().isDefeated() && currentMission.getMember2().isDefeated()) {
             currentMission.getMember1().die();
