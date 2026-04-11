@@ -44,7 +44,8 @@ public class CrewMenu extends AppCompatActivity {
                     "Level: " + member.getLevel() + "\n" +
                     "Experience: " + member.getExperience() + "/" + member.getExperienceToNextLevel() + "\n" +
                     "Health: " + member.getHealth() + "/" + member.getMaxHealth() + "\n" +
-                    "Energy: " + member.getEnergy() + "/" + member.getMaxEnergy();
+                    "Energy: " + member.getEnergy() + "/" + member.getMaxEnergy() + "\n" +
+                    "Status: " + (member.isDefeated() ? "Dead" : "Alive");
             displayList.add(text);
         }
 

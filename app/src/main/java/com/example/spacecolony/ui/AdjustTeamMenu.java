@@ -42,6 +42,14 @@ public class AdjustTeamMenu extends AppCompatActivity{
             }
         }
 
+        if (crewList.isEmpty()) {
+            Toast.makeText(this, "No available crew members", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(AdjustTeamMenu.this, MainMenu.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         crewAdapter = new CrewAdapter(crewList, selectedCrew, new CrewAdapter.OnCrewSelectListener() {
