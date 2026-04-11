@@ -11,4 +11,25 @@
         android:layout_height="wrap_content"
         android:text="Mission" />
 
+    <Button
+        android:id="@+id/buttonSimulator"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Simulator" />
+
+    <Button
+        android:id="@+id/buttonRecruit"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Recruit" />
+
+    <Button
+        android:id="@+id/buttonCrew"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Crew Members" />
+
 </LinearLayout>

@@ -16,6 +16,8 @@ public class CrewDatabase {
     private ArrayList<CrewMember> crewList;
     private Random random;
     private static CrewDatabase instance;
+    private int credits;
+    private int recruitedCount;
 
     private String[] possibleNames = {
             "Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Henry", "Ivy", "Jack", "Ethan"
@@ -24,6 +26,8 @@ public class CrewDatabase {
         crewList = new ArrayList<>();
         random = new Random();
         loadDefaultCrewList();
+        credits = 10000;
+        recruitedCount = 0;
     }
 
     public static CrewDatabase getInstance() {
@@ -83,6 +87,14 @@ public class CrewDatabase {
     public CrewMember recruitCrewMember(String role) {
         String randomName = generateRandomName();
         CrewMember newMember = null;
+        int cost = getRecruitedCost();
+
+        if (credits < cost) {
+            return null;
+        }
+        if (crewList.size() >= possibleNames.length) {
+            return null;
+        }
 
         if (role.equalsIgnoreCase("Medic")) {
             newMember = new Medic(randomName);
@@ -98,6 +110,8 @@ public class CrewDatabase {
 
         if (newMember != null) {
             crewList.add(newMember);
+            credits -= cost;
+            recruitedCount++;
         }
 
         return newMember;
@@ -145,5 +159,21 @@ public class CrewDatabase {
             System.out.println(crewList.get(choice - 1).getName() + " is added to the team.\n");
         }
         return team;
+    }
+
+    public int getCredits() {
+        return credits;
+    }
+    public int getRecruitedCount() {
+        return recruitedCount;
+    }
+    public int getRecruitedCost() {
+        if (recruitedCount >= 8) {
+            return 999999999;
+        }
+        return 50 + recruitedCount * 50;
+    }
+    public boolean isRecruitSoftCapReached() {
+        return recruitedCount >= 8;
     }
 }

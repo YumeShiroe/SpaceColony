@@ -15,6 +15,9 @@
         <activity android:name=".ui.MissionMenu" />
         <activity android:name=".ui.AdjustTeamMenu" />
         <activity android:name=".ui.BattleMenu" />
+        <activity android:name=".ui.SimulatorMenu" />
+        <activity android:name=".ui.RecruitMenu" />
+        <activity android:name=".ui.CrewMenu" />
         <activity
             android:name=".ui.StartMenu"
             android:exported="true">

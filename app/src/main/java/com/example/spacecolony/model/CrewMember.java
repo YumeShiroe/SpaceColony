@@ -16,6 +16,7 @@ public abstract class CrewMember {
     protected int attackPower;
     protected int defensePower;
     protected int shield;
+    private boolean isDead;
 
     public CrewMember(String name, int maxHealth, int maxEnergy, int attackPower, int defensePower) {
         this.name = name;
@@ -32,6 +33,8 @@ public abstract class CrewMember {
 
         this.attackPower = attackPower;
         this.defensePower = defensePower;
+
+        this.isDead = false;
     }
 
     public void gainExperience(int amount) {
@@ -104,6 +107,16 @@ public abstract class CrewMember {
         }
     }
 
+    public void die() {
+        isDead = true;
+        health = 0;
+    }
+    public void revive() {
+        isDead = false;
+        health = maxHealth;
+        energy = maxEnergy;
+    }
+
     public boolean enoughEnergyForMission(int amount) {
         return energy >= amount;
     }
@@ -130,7 +143,7 @@ public abstract class CrewMember {
         return experience;
     }
     public int getExperienceToNextLevel() {
-        return nextLevelExperience - experience;
+        return nextLevelExperience;
     }
     public int getSkillPoints() {
         return skillPoints;
@@ -155,6 +168,9 @@ public abstract class CrewMember {
     }
     public int getDefensePower() {
         return defensePower;
+    }
+    public boolean isDead() {
+        return isDead;
     }
 
 
