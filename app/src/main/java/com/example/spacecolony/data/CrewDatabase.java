@@ -161,6 +161,14 @@ public class CrewDatabase {
         return team;
     }
 
+    public boolean spendCredits(int amount) {
+        if (credits >= amount) {
+            credits -= amount;
+            return true;
+        }
+        return false;
+    }
+
     public void addCredit(int amount) {
         credits += amount;
     }

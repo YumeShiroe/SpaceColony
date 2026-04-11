@@ -38,7 +38,7 @@ public class MissionMenu extends AppCompatActivity{
                 Toast.makeText(this, "Please select your team first.", Toast.LENGTH_SHORT).show();
             } else {
 
-                Mission mission = new Mission("Test Mission", 1, 10, 100, 100);
+                Mission mission = new Mission("Expedition", 1, 10, 10, 50);
                 if (mission.startBattle(team)) {
                     BattleMenu.currentMission = mission;
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.spacecolony.R;
@@ -20,6 +21,9 @@ public class SimulatorMenu extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private Random random;
     private Button backButton;
+    private CrewDatabase crewDatabase;
+    private TextView textCredits;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +35,21 @@ public class SimulatorMenu extends AppCompatActivity {
         displayList = new ArrayList<>();
         updateCrewDisplay();
         backButton = findViewById(R.id.backButton);
+        crewDatabase = CrewDatabase.getInstance();
+        textCredits = findViewById(R.id.textCredits);
+        updateCreditDisplay();
 
         crewListView.setOnItemClickListener((parent, view, position, id) -> {
             CrewMember selectedCrewMember = crewList.get(position);
 
-            selectedCrewMember.gainExperience(10);
+            if (crewDatabase.spendCredits(100)) {
+                selectedCrewMember.gainExperience(10);
+                Toast.makeText(SimulatorMenu.this, selectedCrewMember.getName() + " trained and gained 10 XP!\n-100 credits", Toast.LENGTH_SHORT).show();
+                updateCrewDisplay();
+                updateCreditDisplay();
+            } else {
+                Toast.makeText(SimulatorMenu.this, "Not enough credits!", Toast.LENGTH_SHORT).show();
+            }
 
             Toast.makeText(SimulatorMenu.this, selectedCrewMember.getName() + " gained 10 XP! Yippie!", Toast.LENGTH_SHORT).show();
             updateCrewDisplay();
@@ -59,5 +73,9 @@ public class SimulatorMenu extends AppCompatActivity {
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, displayList);
         crewListView.setAdapter(adapter);
+    }
+    private void updateCreditDisplay() {
+        int credits = crewDatabase.getCredits();
+        textCredits.setText("Credits: " + credits + " (Training costs 100 Credits per time)");
     }
 }

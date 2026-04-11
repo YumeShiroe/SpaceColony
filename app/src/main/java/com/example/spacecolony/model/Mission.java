@@ -241,10 +241,10 @@ public class Mission {
         return energyCost;
     }
     public int getRewardXP() {
-        return rewardXP;
+        return rewardXP * difficulty;
     }
     public int getRewardCredit() {
-        return rewardCredit;
+        return rewardCredit * difficulty;
     }
 
     public Threat getThreat() {
