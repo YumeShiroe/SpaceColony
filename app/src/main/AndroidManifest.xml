@@ -18,6 +18,7 @@
         <activity android:name=".ui.SimulatorMenu" />
         <activity android:name=".ui.RecruitMenu" />
         <activity android:name=".ui.CrewMenu" />
+        <activity android:name=".ui.MedbayMenu" />
         <activity
             android:name=".ui.StartMenu"
             android:exported="true">
