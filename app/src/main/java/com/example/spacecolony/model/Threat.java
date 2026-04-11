@@ -7,7 +7,7 @@ public abstract class Threat {
 
     public Threat(String name, int baseHealth, int baseAttackPower, int missionDifficulty) {
         this.name = name;
-        this.health = baseHealth + (missionDifficulty * 10);
+        this.health = baseHealth + (missionDifficulty * 15);
         this.attackPower = baseAttackPower + (missionDifficulty * 2);
     }
 

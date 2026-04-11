@@ -1,5 +1,7 @@
 package com.example.spacecolony.model;
 
+import com.example.spacecolony.data.CrewDatabase;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -27,7 +29,7 @@ public class Mission {
     // Temporary threat
     public void assignThreat() {
         Random random = new Random();
-        if (difficulty >= 3) {
+        if (difficulty >= 5) {
             threat = new GalaticBanditBoss(difficulty);
             return;
         }
@@ -47,7 +49,7 @@ public class Mission {
     }
 
     public void increaseDifficulty() {
-        if (difficulty < 3) {
+        if (difficulty < 5) {
             difficulty++;
         }
     }
@@ -200,7 +202,7 @@ public class Mission {
             member2.gainExperience(rewardXP);
         }
         if (!member1.isDefeated() && !member2.isDefeated()) {
-
+            CrewDatabase.getInstance().addCredit(rewardCredit);
         }
     }
 
@@ -223,7 +225,6 @@ public class Mission {
         member1.useEnergy(energyCost);
         member2.useEnergy(energyCost);
 
-        assignThreat();
         turnCount = 1;
         isBattleStarted = true;
         return true;

@@ -50,7 +50,8 @@ public class MaxwellThreat extends Threat{
         CrewMember target = chooseTarget(target1, target2);
 
         if (target != null) {
-            return name + " carefully rips" + target.getName() + " with its claws.";
+            attack(target);
+            return name + " carefully rips " + target.getName() + " with its claws.";
         }
         return name + " has no valid target";
     }

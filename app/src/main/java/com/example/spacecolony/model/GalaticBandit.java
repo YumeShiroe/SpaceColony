@@ -47,6 +47,7 @@ public class GalaticBandit extends Threat {
         CrewMember target = chooseTarget(target1, target2);
 
         if (target != null) {
+            attack(target);
             return name + " slashes " + target.getName() + " with his sword.";
         }
         return name + " has no valid target";

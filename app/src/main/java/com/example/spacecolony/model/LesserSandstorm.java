@@ -47,6 +47,7 @@ public class LesserSandstorm extends Threat {
         CrewMember target = chooseTarget(target1, target2);
 
         if (target != null) {
+            attack(target);
             return name + " throws sand at " + target.getName();
         }
         return name + " has no valid target";

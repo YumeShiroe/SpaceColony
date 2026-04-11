@@ -47,6 +47,7 @@ public class GolemThreat extends Threat {
         CrewMember target = chooseTarget(target1, target2);
 
         if (target != null) {
+            attack(target);
             return name + " strikes" + target.getName() + " with its hand.";
         }
         return name + " has no valid target";

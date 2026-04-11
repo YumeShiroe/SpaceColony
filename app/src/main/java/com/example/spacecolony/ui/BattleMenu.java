@@ -74,9 +74,22 @@ public class BattleMenu extends AppCompatActivity{
         });
         buttonNextOrRetry.setOnClickListener(v -> {
             if (isPlayerWon) {
-                Intent intent = new Intent(BattleMenu.this, MissionMenu.class);
-                startActivity(intent);
-                finish();
+                currentMission.increaseDifficulty();
+                currentMission.assignThreat();
+
+                buttonAttack.setEnabled(true);
+                buttonDefend.setEnabled(true);
+                buttonSkill.setEnabled(true);
+                buttonAdjustTeamEnd.setVisibility(View.GONE);
+                buttonNextOrRetry.setVisibility(View.GONE);
+
+                isPlayerWon = false;
+                textBattleStatus.setText(
+                        currentMission.getMember1().getName() + " and " +
+                        currentMission.getMember2().getName() + " VS " +
+                        currentMission.getThreat().getName()
+                );
+                updateStatus();
             } else {
                 if (adjustedTeamReady) {
                     buttonAttack.setEnabled(true);
@@ -124,11 +137,8 @@ public class BattleMenu extends AppCompatActivity{
 
         if (currentMission.getThreat().isDefeated()) {
             isPlayerWon = true;
-            currentMission.getMember1().gainExperience(currentMission.getRewardXP());
-            currentMission.getMember2().gainExperience(currentMission.getRewardXP());
-            CrewDatabase.getInstance().addCredit(currentMission.getRewardCredit());
-            currentMission.increaseDifficulty();
             textBattleStatus.setText(battleLog + "\nMission Completed!" + "\n+" + currentMission.getRewardXP() + " XP" + "\n+" + currentMission.getRewardCredit() + " Credits");
+            showEndButtons(true);
             return;
         } else if (currentMission.getMember1().isDefeated() && currentMission.getMember2().isDefeated()) {
             currentMission.getMember1().die();
