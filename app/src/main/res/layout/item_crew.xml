@@ -24,6 +24,13 @@
         android:layout_marginBottom="8dp" />
 
     <TextView
+        android:id="@+id/textTrait"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Trait: None"
+        android:layout_marginTop="4dp" />
+
+    <TextView
         android:id="@+id/textCrewLevel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

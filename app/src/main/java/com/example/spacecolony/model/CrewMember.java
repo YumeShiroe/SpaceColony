@@ -149,9 +149,9 @@ public abstract class CrewMember {
             attackPower += 2;
         } else if (trait == Trait.DILIGENT) {
             bonusAttackGrowth += 1;
-            bonusAttackGrowth += 1;
+            bonusHealthGrowth += 1;
         } else if (trait == Trait.GENIUS) {
-            bonusHealthGrowth += 2;
+            bonusAttackGrowth += 2;
             bonusHealthGrowth += 2;
         }
     }
@@ -267,6 +267,10 @@ public abstract class CrewMember {
                 "Damage Dealt: " + damageDealt + " | Damage Taken: " + damageTaken + "\n" +
                 "Skill Used: " + skillUsed;
     }
+    public Trait getTrait() {
+        return trait;
+    }
+
 
 
     @Override

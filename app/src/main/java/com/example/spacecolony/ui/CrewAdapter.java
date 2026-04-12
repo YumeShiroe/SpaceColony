@@ -45,6 +45,7 @@ public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.CrewViewHolder
         CrewMember crewMember = crewList.get(position);
         holder.textCrewName.setText(crewMember.getName());
         holder.textCrewRole.setText("Role: " + crewMember.getClass().getSimpleName());
+        holder.textTrait.setText("Trait: " + (crewMember.getTrait() != null ? crewMember.getTrait().getName() : "None"));
         holder.textCrewLevel.setText("Level: " + crewMember.getLevel());
         holder.textCrewExperience.setText("XP: " + crewMember.getExperience() + "/" + crewMember.getExperienceToNextLevel());
         holder.textCrewHealth.setText("Health: " + crewMember.getHealth() + "/" + crewMember.getMaxHealth());
@@ -99,12 +100,14 @@ public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.CrewViewHolder
         TextView textCrewHealth;
         TextView textCrewEnergy;
         TextView textCrewStatus;
+        TextView textTrait;
         Button buttonSelect;
 
         public CrewViewHolder(@NonNull View itemView) {
             super(itemView);
             textCrewName = itemView.findViewById(R.id.textCrewName);
             textCrewRole = itemView.findViewById(R.id.textCrewRole);
+            textTrait = itemView.findViewById(R.id.textTrait);
             buttonSelect = itemView.findViewById(R.id.buttonSelectCrew);
             textCrewLevel = itemView.findViewById(R.id.textCrewLevel);
             textCrewExperience = itemView.findViewById(R.id.textCrewExperience);

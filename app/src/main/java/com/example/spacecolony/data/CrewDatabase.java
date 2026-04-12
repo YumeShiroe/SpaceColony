@@ -118,6 +118,7 @@ public class CrewDatabase {
         }
 
         if (newMember != null) {
+            newMember.addTrait(getRandomTrait());
             crewList.add(newMember);
             credits -= cost;
             recruitedCount++;
