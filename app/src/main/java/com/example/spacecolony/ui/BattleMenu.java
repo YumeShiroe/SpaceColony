@@ -27,6 +27,7 @@ public class BattleMenu extends AppCompatActivity{
     public static Mission currentMission;
     private boolean isPlayerWon = false;
     private boolean adjustedTeamReady = false;
+    private TextView textTurnInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class BattleMenu extends AppCompatActivity{
         textStatus = findViewById(R.id.textStatus);
         buttonAdjustTeamEnd = findViewById(R.id.buttonAdjustTeamEnd);
         buttonNextOrRetry = findViewById(R.id.buttonNextOrRetry);
+        textTurnInfo = findViewById(R.id.textTurnInfo);
 
         if (currentMission == null) {
             textBattleStatus.setText("No mission selected");
@@ -58,6 +60,7 @@ public class BattleMenu extends AppCompatActivity{
                 currentMission.getThreat().getName()
         );
 
+        updateTurnInfo();
         updateStatus();
 
         buttonAttack.setOnClickListener(v -> {
@@ -91,6 +94,7 @@ public class BattleMenu extends AppCompatActivity{
                         currentMission.getThreat().getName()
                 );
                 updateStatus();
+                updateTurnInfo();
             } else {
                 if (adjustedTeamReady) {
                     buttonAttack.setEnabled(true);
@@ -105,6 +109,7 @@ public class BattleMenu extends AppCompatActivity{
                             currentMission.getThreat().getName()
                     );
                     updateStatus();
+                    updateTurnInfo();
                     adjustedTeamReady = false;
                 } else {
                     textBattleStatus.setText("Please adjust your team first!");
@@ -134,6 +139,7 @@ public class BattleMenu extends AppCompatActivity{
         }
 
         textBattleStatus.setText(battleLog);
+        updateTurnInfo();
         updateStatus();
 
         if (currentMission.getThreat().isDefeated()) {
@@ -211,6 +217,10 @@ public class BattleMenu extends AppCompatActivity{
                 currentMission.getMember2().getName() + " HP: " + currentMission.getMember2().getHealth() + "/" + currentMission.getMember2().getMaxHealth() + "\n" +
                 currentMission.getThreat().getName() + " HP: " + currentMission.getThreat().getHealth();
         textStatus.setText(status);
+    }
+    private void updateTurnInfo() {
+        String turnInfo = "Turn(s): " + currentMission.getTurnCount();
+        textTurnInfo.setText(turnInfo);
     }
 
     private void showEndButtons(boolean won) {
