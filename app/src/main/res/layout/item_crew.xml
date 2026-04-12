@@ -23,6 +23,41 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="8dp" />
 
+    <TextView
+        android:id="@+id/textCrewLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Level"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/textCrewExperience"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Experience"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/textCrewHealth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Health"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/textCrewEnergy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Energy"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/textCrewStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:layout_marginTop="4dp" />
+
     <Button
         android:id="@+id/buttonSelectCrew"
         android:layout_width="wrap_content"

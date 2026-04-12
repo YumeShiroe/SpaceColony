@@ -15,16 +15,18 @@ public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.CrewViewHolder
     private ArrayList<CrewMember> crewList;
     private ArrayList<CrewMember> selectedCrew;
     private OnCrewSelectListener listener;
+    private boolean showSelectionButton;
 
     public interface OnCrewSelectListener {
         void onCrewSelectionChanged();
         void onLimitReached();
     }
 
-    public CrewAdapter(ArrayList<CrewMember> crewList, ArrayList<CrewMember> selectedCrew, OnCrewSelectListener listener) {
+    public CrewAdapter(ArrayList<CrewMember> crewList, ArrayList<CrewMember> selectedCrew, OnCrewSelectListener listener, boolean showSelectionButton) {
         this.crewList = crewList;
         this.selectedCrew = selectedCrew;
         this.listener = listener;
+        this.showSelectionButton = showSelectionButton;
     }
 
     @NonNull
@@ -39,29 +41,39 @@ public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.CrewViewHolder
     public void onBindViewHolder(@NonNull CrewViewHolder holder, int position) {
         CrewMember crewMember = crewList.get(position);
         holder.textCrewName.setText(crewMember.getName());
-        holder.textCrewRole.setText(crewMember.getClass().getSimpleName());
+        holder.textCrewRole.setText("Role: " + crewMember.getClass().getSimpleName());
+        holder.textCrewLevel.setText("Level: " + crewMember.getLevel());
+        holder.textCrewExperience.setText("XP: " + crewMember.getExperience() + "/" + crewMember.getExperienceToNextLevel());
+        holder.textCrewHealth.setText("Health: " + crewMember.getHealth() + "/" + crewMember.getMaxHealth());
+        holder.textCrewEnergy.setText("Energy: " + crewMember.getEnergy() + "/" + crewMember.getMaxEnergy());
+        holder.textCrewStatus.setText("Status: " + (crewMember.isDefeated() ? "Defeated" : "Alive"));
 
-        if (selectedCrew.contains(crewMember)) {
-            holder.buttonSelect.setText("Deselect");
-        } else {
-            holder.buttonSelect.setText("Select");
-        }
-
-        holder.buttonSelect.setOnClickListener(v -> {
+        if (showSelectionButton) {
             if (selectedCrew.contains(crewMember)) {
-                selectedCrew.remove(crewMember);
-                listener.onCrewSelectionChanged();
-                notifyItemChanged(position);
+                holder.buttonSelect.setText("Deselect");
             } else {
-                if (selectedCrew.size() < 2) {
-                    selectedCrew.add(crewMember);
+                holder.buttonSelect.setText("Select");
+            }
+
+            holder.buttonSelect.setOnClickListener(v -> {
+                if (selectedCrew.contains(crewMember)) {
+                    selectedCrew.remove(crewMember);
                     listener.onCrewSelectionChanged();
                     notifyItemChanged(position);
                 } else {
-                    listener.onLimitReached();
+                    if (selectedCrew.size() < 2) {
+                        selectedCrew.add(crewMember);
+                        listener.onCrewSelectionChanged();
+                        notifyItemChanged(position);
+                    } else {
+                        listener.onLimitReached();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            holder.buttonSelect.setVisibility(View.GONE);
+            holder.buttonSelect.setOnClickListener(null);
+        }
     }
 
     @Override
@@ -72,6 +84,11 @@ public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.CrewViewHolder
     public static class CrewViewHolder extends RecyclerView.ViewHolder {
         TextView textCrewName;
         TextView textCrewRole;
+        TextView textCrewLevel;
+        TextView textCrewExperience;
+        TextView textCrewHealth;
+        TextView textCrewEnergy;
+        TextView textCrewStatus;
         Button buttonSelect;
 
         public CrewViewHolder(@NonNull View itemView) {
@@ -79,6 +96,11 @@ public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.CrewViewHolder
             textCrewName = itemView.findViewById(R.id.textCrewName);
             textCrewRole = itemView.findViewById(R.id.textCrewRole);
             buttonSelect = itemView.findViewById(R.id.buttonSelectCrew);
+            textCrewLevel = itemView.findViewById(R.id.textCrewLevel);
+            textCrewExperience = itemView.findViewById(R.id.textCrewExperience);
+            textCrewHealth = itemView.findViewById(R.id.textCrewHealth);
+            textCrewEnergy = itemView.findViewById(R.id.textCrewEnergy);
+            textCrewStatus = itemView.findViewById(R.id.textCrewStatus);
         }
     }
 }

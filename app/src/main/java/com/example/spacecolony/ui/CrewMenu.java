@@ -10,14 +10,14 @@ import com.example.spacecolony.R;
 import com.example.spacecolony.data.CrewDatabase;
 import com.example.spacecolony.model.CrewMember;
 import java.util.ArrayList;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class CrewMenu extends AppCompatActivity {
     private Button backButton;
-    private ListView crewListView;
-
     private ArrayList<CrewMember> crewList;
-    private ArrayList<String> displayList;
-    private ArrayAdapter<String> adapter;
+    private RecyclerView crewRecyclerView;
+    private CrewAdapter crewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,31 +25,24 @@ public class CrewMenu extends AppCompatActivity {
         setContentView(R.layout.activity_crew_menu);
 
         backButton = findViewById(R.id.backButton);
-        crewListView = findViewById(R.id.crewListView);
+        crewRecyclerView = findViewById(R.id.crewRecyclerView);
         crewList = CrewDatabase.getInstance().getCrewList();
-        displayList = new ArrayList<>();
-        updateCrewDisplay();
+        crewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        crewAdapter = new CrewAdapter(crewList, new ArrayList<>(), new CrewAdapter.OnCrewSelectListener() {
+            @Override
+            public void onCrewSelectionChanged() {
+
+            }
+            public void onLimitReached() {
+
+            }
+        }, false);
+        crewRecyclerView.setAdapter(crewAdapter);
+
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(CrewMenu.this, MainMenu.class);
             startActivity(intent);
         });
     }
 
-    private void updateCrewDisplay() {
-        displayList.clear();
-
-        for (CrewMember member : crewList) {
-            String text = member.getName() + " (" +
-                    member.getClass().getSimpleName() + ")\n" +
-                    "Level: " + member.getLevel() + "\n" +
-                    "Experience: " + member.getExperience() + "/" + member.getExperienceToNextLevel() + "\n" +
-                    "Health: " + member.getHealth() + "/" + member.getMaxHealth() + "\n" +
-                    "Energy: " + member.getEnergy() + "/" + member.getMaxEnergy() + "\n" +
-                    "Status: " + (member.isDefeated() ? "Dead" : "Alive");
-            displayList.add(text);
-        }
-
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, displayList);
-        crewListView.setAdapter(adapter);
-    }
 }
