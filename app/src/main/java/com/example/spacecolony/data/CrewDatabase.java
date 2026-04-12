@@ -7,6 +7,8 @@ import com.example.spacecolony.model.Soldier;
 import com.example.spacecolony.model.Scientist;
 import com.example.spacecolony.model.Engineer;
 import com.example.spacecolony.model.Team;
+import com.example.spacecolony.model.TraitRarity;
+import com.example.spacecolony.model.Trait;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -175,6 +177,28 @@ public class CrewDatabase {
             return true;
         }
         return false;
+    }
+
+    public TraitRarity getRandomTraitRarity() {
+        int chance = random.nextInt(100);
+        if (chance < 50) {
+            return TraitRarity.COMMON;
+        } else if (chance < 80) {
+            return TraitRarity.RARE;
+        } else {
+            return TraitRarity.EPIC;
+        }
+    }
+    public Trait getRandomTrait() {
+        TraitRarity rarity = getRandomTraitRarity();
+        ArrayList<Trait> currentTraits = new ArrayList<>();
+
+        for (Trait trait : Trait.values()) {
+            if (trait.getRarity() == rarity) {
+                currentTraits.add(trait);
+            }
+        }
+        return currentTraits.get(random.nextInt(currentTraits.size()));
     }
 
     public void addCredit(int amount) {

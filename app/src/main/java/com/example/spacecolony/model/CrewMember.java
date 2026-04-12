@@ -1,5 +1,7 @@
 package com.example.spacecolony.model;
 
+import com.example.spacecolony.model.Trait;
+
 public abstract class CrewMember {
     protected String name;
 
@@ -23,6 +25,9 @@ public abstract class CrewMember {
     private int damageDealt;
     private int damageTaken;
     private int skillUsed;
+    protected Trait trait;
+    protected int bonusHealthGrowth;
+    protected int bonusAttackGrowth;
 
     public CrewMember(String name, int maxHealth, int maxEnergy, int attackPower, int defensePower) {
         this.name = name;
@@ -49,6 +54,10 @@ public abstract class CrewMember {
         this.damageDealt = 0;
         this.damageTaken = 0;
         this.skillUsed = 0;
+
+        this.trait = null;
+        this.bonusHealthGrowth = 0;
+        this.bonusAttackGrowth = 0;
     }
 
     public void gainExperience(int amount) {
@@ -65,13 +74,13 @@ public abstract class CrewMember {
         skillPoints++;
         nextLevelExperience += 5;
 
-        maxHealth += getHealthGrowth();
+        maxHealth += getHealthGrowth() + bonusHealthGrowth;
         maxEnergy += getEnergyGrowth();
 
         health = maxHealth;
         energy = maxEnergy;
 
-        attackPower += getAttackGrowth();
+        attackPower += getAttackGrowth() + bonusAttackGrowth;
         defensePower += getDefenseGrowth();
     }
 
@@ -129,6 +138,22 @@ public abstract class CrewMember {
         isDead = false;
         health = maxHealth;
         energy = maxEnergy;
+    }
+
+    public void addTrait(Trait trait) {
+        this.trait = trait;
+        if (trait == Trait.TOUGH) {
+            maxHealth += 4;
+            health += 4;
+        } else if (trait == Trait.STRONG) {
+            attackPower += 2;
+        } else if (trait == Trait.DILIGENT) {
+            bonusAttackGrowth += 1;
+            bonusAttackGrowth += 1;
+        } else if (trait == Trait.GENIUS) {
+            bonusHealthGrowth += 2;
+            bonusHealthGrowth += 2;
+        }
     }
 
     public abstract String useSkill(Threat threat, CrewMember ally);
