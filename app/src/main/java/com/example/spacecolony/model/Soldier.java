@@ -27,6 +27,8 @@ public class Soldier extends CrewMember {
     public String useSkill(Threat threat, CrewMember ally) {
         shield += defensePower;
         threat.takeDamage(attackPower + shield - 3);
+        recordDamageDealt(attackPower + shield - 3);
+        recordSkillUsed();
         return name + " utilized close quarter combat. Soldier gains " + defensePower + " shield and deals " + attackPower + " damage";
     }
 }

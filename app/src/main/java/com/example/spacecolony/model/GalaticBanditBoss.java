@@ -27,11 +27,11 @@ public class GalaticBanditBoss extends Threat {
         }
         target = chooseTarget(target1, target2);
         if (target != null) {
-            target.takeDamage(attackPower - 1);
+            target.takeDamage(attackPower - 3);
         }
         target = chooseTarget(target1, target2);
         if (target != null) {
-            target.takeDamage(attackPower - 2);
+            target.takeDamage(attackPower - 3);
         }
 
         ColpiDiTaglioCoolDown = 1;
@@ -40,7 +40,7 @@ public class GalaticBanditBoss extends Threat {
     public String SezionaturaDiElefante(CrewMember target1, CrewMember target2) {
         CrewMember target = chooseTarget(target1, target2);
         if (target != null) {
-            target.takeDamage(attackPower - 2);
+            target.takeDamage(attackPower - 3);
         }
         target = chooseTarget(target1, target2);
         if (target != null) {
@@ -48,7 +48,7 @@ public class GalaticBanditBoss extends Threat {
         }
         target = chooseTarget(target1, target2);
         if (target != null) {
-            target.takeDamage(attackPower - 2);
+            target.takeDamage(attackPower - 3);
         }
         target = chooseTarget(target1, target2);
         if (target != null) {
@@ -61,22 +61,22 @@ public class GalaticBanditBoss extends Threat {
     public String Disposal(CrewMember target1, CrewMember target2) {
         CrewMember target = chooseTarget(target1, target2);
         if (target != null) {
-            target.takeDamage(attackPower - 2);
+            target.takeDamage(attackPower - 3);
         }
         target = chooseTarget(target1, target2);
         if (target != null) {
-            target.takeDamage(attackPower - 2);
+            target.takeDamage(attackPower - 3);
         }
         target = chooseTarget(target1, target2);
         if (target != null) {
-            target.takeDamage(attackPower - 2);
+            target.takeDamage(attackPower - 3);
         }
         target = chooseTarget(target1, target2);
         if (target != null) {
-            target.takeDamage(attackPower - 2);
+            target.takeDamage(attackPower - 3);
         }
         if (target != null) {
-            target.takeDamage(attackPower - 2);
+            target.takeDamage(attackPower - 3);
         }
 
         ColpiDiTaglioCoolDown = 10;

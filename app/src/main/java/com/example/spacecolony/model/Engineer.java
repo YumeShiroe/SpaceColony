@@ -25,6 +25,7 @@ public class Engineer extends CrewMember {
     @Override
     public String useSkill(Threat threat, CrewMember ally) {
         shield += 99;
+        recordSkillUsed();
         return name + " uses Absolute Defense!! Engineer's shield is temporary increased to 99!";
     }
 }

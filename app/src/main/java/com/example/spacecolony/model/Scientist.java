@@ -29,6 +29,7 @@ public class Scientist extends CrewMember {
         if (threat.attackPower < 2) {
             threat.attackPower = 2;
         }
+        recordSkillUsed();
         return name + " has analyzed the threat's attack pattern and lower it attack power to " + threat.attackPower + "!";
     }
 }

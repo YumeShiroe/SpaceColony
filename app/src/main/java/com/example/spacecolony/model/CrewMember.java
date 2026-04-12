@@ -20,6 +20,9 @@ public abstract class CrewMember {
     protected int skillCooldown;
     private int missionWon;
     private int timesDefeated;
+    private int damageDealt;
+    private int damageTaken;
+    private int skillUsed;
 
     public CrewMember(String name, int maxHealth, int maxEnergy, int attackPower, int defensePower) {
         this.name = name;
@@ -43,6 +46,9 @@ public abstract class CrewMember {
 
         this.missionWon = 0;
         this.timesDefeated = 0;
+        this.damageDealt = 0;
+        this.damageTaken = 0;
+        this.skillUsed = 0;
     }
 
     public void gainExperience(int amount) {
@@ -70,13 +76,14 @@ public abstract class CrewMember {
     }
 
     public void act(Threat threat) {
-        System.out.println(name + " attacks " + threat.getName());
+        //System.out.println(name + " attacks " + threat.getName());
         threat.takeDamage(attackPower);
+        recordDamageDealt(attackPower);
     }
 
     public void defend() {
         shield = defensePower;
-        System.out.println(name + " gains a shield of " + shield);
+        //System.out.println(name + " gains a shield of " + shield);
     }
 
     public void resetShield() {
@@ -85,9 +92,6 @@ public abstract class CrewMember {
     }
 
     public void takeDamage(int amount) {
-        // shield system: the damage is reduced by the shield value
-        // the remaining damage will affect the Crew Member health
-
         int remainingDamage = amount;
         if (shield > 0) {
             if (shield >= remainingDamage) {
@@ -100,11 +104,13 @@ public abstract class CrewMember {
         }
 
         health -= remainingDamage;
+        recordDamageTaken(remainingDamage);
+
         if (health < 0) {
             health = 0;
         }
 
-        System.out.println(name + " takes " + remainingDamage + " damage.");
+        //System.out.println(name + " takes " + remainingDamage + " damage.");
     }
 
     public void useEnergy(int amount) {
@@ -151,6 +157,19 @@ public abstract class CrewMember {
     }
     public void recordDefeat() {
         timesDefeated++;
+    }
+    public void recordDamageDealt(int amount) {
+        if (amount >= 0) {
+            damageDealt += amount;
+        }
+    }
+    public void recordDamageTaken(int amount) {
+        if (amount >= 0) {
+            damageTaken += amount;
+        }
+    }
+    public void recordSkillUsed() {
+        skillUsed++;
     }
 
     // general method for crew member
@@ -209,8 +228,19 @@ public abstract class CrewMember {
     public int getTimesDefeated() {
         return timesDefeated;
     }
+    public int getDamageDeal() {
+        return damageDealt;
+    }
+    public int getDamageTaken() {
+        return damageTaken;
+    }
+    public int getSkillUsed() {
+        return skillUsed;
+    }
     public String getStatistics() {
-        return "Wins: " + missionWon + " | Defeats: " + timesDefeated;
+        return "Wins: " + missionWon + " | Defeats: " + timesDefeated + "\n" +
+                "Damage Dealt: " + damageDealt + " | Damage Taken: " + damageTaken + "\n" +
+                "Skill Used: " + skillUsed;
     }
 
 

@@ -37,6 +37,7 @@ public class Medic extends CrewMember {
                 ally.health = ally.maxHealth;
             }
         }
+        recordSkillUsed();
         return name + " heals himself for " + healAmount + " and ally for " + (healAmount - 2) + " health!";
     }
 }
