@@ -15,6 +15,7 @@ import com.example.spacecolony.model.Mission;
 public class MissionMenu extends AppCompatActivity{
     private Button buttonAdjustTeam;
     private Button buttonStartMission;
+    private Button buttonBackToMenu;
     private Team team;
 
     private String crewName1 = "";
@@ -27,6 +28,7 @@ public class MissionMenu extends AppCompatActivity{
 
         buttonAdjustTeam = findViewById(R.id.buttonAdjustTeam);
         buttonStartMission = findViewById(R.id.buttonStartMission);
+        buttonBackToMenu = findViewById(R.id.buttonBackToMenu);
 
         buttonAdjustTeam.setOnClickListener(v -> {
             Intent intent = new Intent(MissionMenu.this, AdjustTeamMenu.class);
@@ -46,6 +48,10 @@ public class MissionMenu extends AppCompatActivity{
                     startActivity(intent);
                 }
             }
+        });
+        buttonBackToMenu.setOnClickListener(v -> {
+            Intent intent = new Intent(MissionMenu.this, MainMenu.class);
+            startActivity(intent);
         });
     }
 

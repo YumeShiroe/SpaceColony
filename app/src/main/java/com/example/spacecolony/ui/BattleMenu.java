@@ -14,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import com.example.spacecolony.data.CrewDatabase;
 import java.util.Random;
+import com.example.spacecolony.model.GalaticBanditBoss;
 
 public class BattleMenu extends AppCompatActivity{
     private TextView textBattleStatus;
@@ -136,6 +137,20 @@ public class BattleMenu extends AppCompatActivity{
         updateStatus();
 
         if (currentMission.getThreat().isDefeated()) {
+            boolean isFinalBossDefeated = currentMission.getDifficulty() == 5 && currentMission.getThreat() instanceof GalaticBanditBoss;
+
+            if (isFinalBossDefeated) {
+                textBattleStatus.setText(
+                        battleLog + "\nGalatic Bandit Boss Defeated!" + "\n" +
+                        "The expedition is completed! Congratualations!" + "\n" +
+                        currentMission.getRewardXP() + " XP" + "\n" +
+                        currentMission.getRewardCredit() + " Credits"
+                );
+                Intent intent = new Intent(BattleMenu.this, EndGameMenu.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
             isPlayerWon = true;
             textBattleStatus.setText(battleLog + "\nMission Completed!" + "\n+" + currentMission.getRewardXP() + " XP" + "\n+" + currentMission.getRewardCredit() + " Credits");
             showEndButtons(true);
