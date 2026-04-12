@@ -41,8 +41,8 @@ public abstract class CrewMember {
 
         this.isDead = false;
 
-        this.missionWon = missionWon;
-        this.timesDefeated = timesDefeated;
+        this.missionWon = 0;
+        this.timesDefeated = 0;
     }
 
     public void gainExperience(int amount) {

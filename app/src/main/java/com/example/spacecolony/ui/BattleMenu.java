@@ -137,6 +137,16 @@ public class BattleMenu extends AppCompatActivity{
         updateStatus();
 
         if (currentMission.getThreat().isDefeated()) {
+            CrewDatabase crewDatabase = CrewDatabase.getInstance();
+
+            if (!currentMission.getMember1().isDefeated()) {
+                currentMission.getMember1().recordMissionWon();
+            }
+            if (!currentMission.getMember2().isDefeated()) {
+                currentMission.getMember2().recordMissionWon();
+            }
+            crewDatabase.recordMisionWon();
+
             boolean isFinalBossDefeated = currentMission.getDifficulty() == 5 && currentMission.getThreat() instanceof GalaticBanditBoss;
 
             if (isFinalBossDefeated) {
@@ -156,6 +166,11 @@ public class BattleMenu extends AppCompatActivity{
             showEndButtons(true);
             return;
         } else if (currentMission.getMember1().isDefeated() && currentMission.getMember2().isDefeated()) {
+            CrewDatabase crewDatabase = CrewDatabase.getInstance();
+            currentMission.getMember1().recordDefeat();
+            currentMission.getMember2().recordDefeat();
+            crewDatabase.recordMissionLost();
+
             currentMission.getMember1().die();
             currentMission.getMember2().die();
             isPlayerWon = false;

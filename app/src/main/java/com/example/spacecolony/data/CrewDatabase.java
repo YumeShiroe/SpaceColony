@@ -28,12 +28,12 @@ public class CrewDatabase {
     public CrewDatabase() {
         crewList = new ArrayList<>();
         random = new Random();
-        loadDefaultCrewList();
         credits = 10000;
         recruitedCount = 0;
         totalCrewRecruit = 0;
         totalMissionWon = 0;
         totalMissionLost = 0;
+        loadDefaultCrewList();
     }
 
     public static CrewDatabase getInstance() {
@@ -46,6 +46,7 @@ public class CrewDatabase {
     private void loadDefaultCrewList() {
         crewList.add(new Scientist("David"));
         crewList.add(new Soldier("Ethan"));
+        totalCrewRecruit += 2;
     }
 
     public ArrayList<CrewMember> getCrewList() {

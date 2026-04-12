@@ -13,6 +13,7 @@ public class MainMenu extends AppCompatActivity{
     private Button recruitButton;
     private Button crewButton;
     private Button medbayButton;
+    private Button statisticsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,8 @@ public class MainMenu extends AppCompatActivity{
         recruitButton = findViewById(R.id.buttonRecruit);
         crewButton = findViewById(R.id.buttonCrew);
         medbayButton = findViewById(R.id.buttonMedbay);
+        statisticsButton = findViewById(R.id.buttonStatistics);
+
 
         missionButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainMenu.this, MissionMenu.class);
@@ -43,6 +46,10 @@ public class MainMenu extends AppCompatActivity{
         });
         medbayButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainMenu.this, MedbayMenu.class);
+            startActivity(intent);
+        });
+        statisticsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainMenu.this, StatisticMenu.class);
             startActivity(intent);
         });
     }

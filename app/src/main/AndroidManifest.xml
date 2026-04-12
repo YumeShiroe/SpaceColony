@@ -20,6 +20,7 @@
         <activity android:name=".ui.CrewMenu" />
         <activity android:name=".ui.MedbayMenu" />
         <activity android:name=".ui.EndGameMenu" />
+        <activity android:name=".ui.StatisticMenu" />
         <activity
             android:name=".ui.StartMenu"
             android:exported="true">
