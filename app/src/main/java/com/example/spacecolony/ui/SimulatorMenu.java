@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,16 +12,19 @@ import com.example.spacecolony.model.CrewMember;
 import com.example.spacecolony.data.CrewDatabase;
 import java.util.ArrayList;
 import java.util.Random;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 
 public class SimulatorMenu extends AppCompatActivity {
-    private ListView crewListView;
     private ArrayList<CrewMember> crewList;
-    private ArrayList<String> displayList;
-    private ArrayAdapter<String> adapter;
     private Random random;
     private Button backButton;
     private CrewDatabase crewDatabase;
     private TextView textCredits;
+    private CrewAdapter crewAdapter;
+    private RecyclerView crewRecyclerView;
+    private int trainingCost = 100;
 
 
     @Override
@@ -30,50 +32,47 @@ public class SimulatorMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simulator_menu);
 
-        crewListView = findViewById(R.id.crewListView);
-        crewList = CrewDatabase.getInstance().getCrewList();
-        displayList = new ArrayList<>();
-        updateCrewDisplay();
         backButton = findViewById(R.id.backButton);
-        crewDatabase = CrewDatabase.getInstance();
         textCredits = findViewById(R.id.textCredits);
-        updateCreditDisplay();
 
-        crewListView.setOnItemClickListener((parent, view, position, id) -> {
-            CrewMember selectedCrewMember = crewList.get(position);
+        crewRecyclerView = findViewById(R.id.crewRecyclerView);
+        crewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        crewDatabase = CrewDatabase.getInstance();
+        crewList = crewDatabase.getCrewList();
 
-            if (crewDatabase.spendCredits(100)) {
-                selectedCrewMember.gainExperience(10);
-                Toast.makeText(SimulatorMenu.this, selectedCrewMember.getName() + " trained and gained 10 XP!\n-100 credits", Toast.LENGTH_SHORT).show();
-                updateCrewDisplay();
-                updateCreditDisplay();
-            } else {
-                Toast.makeText(SimulatorMenu.this, "Not enough credits!", Toast.LENGTH_SHORT).show();
+        crewAdapter = new CrewAdapter(crewList, new ArrayList<>(), new CrewAdapter.OnCrewSelectListener() {
+            @Override
+            public void onCrewSelectionChanged() {
             }
+            @Override
+            public void onLimitReached() {
+            }
+            @Override
+            public void onItemClick(CrewMember crewMember) {
+                if (crewMember.isDefeated()) {
+                    Toast.makeText(SimulatorMenu.this, "Crew member defeated!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (crewDatabase.spendCredits(trainingCost)) {
+                    crewMember.gainExperience(10);
+                    Toast.makeText(SimulatorMenu.this, "Crew member trained!", Toast.LENGTH_SHORT).show();
+                    updateCreditDisplay();
+                    crewAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(SimulatorMenu.this, "Not enough credits!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, false, true);
 
-            Toast.makeText(SimulatorMenu.this, selectedCrewMember.getName() + " gained 10 XP! Yippie!", Toast.LENGTH_SHORT).show();
-            updateCrewDisplay();
-        });
+        crewRecyclerView.setAdapter(crewAdapter);
+        updateCreditDisplay();
 
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(SimulatorMenu.this, MainMenu.class);
             startActivity(intent);
         });
     }
-    private void updateCrewDisplay() {
-        displayList.clear();
-        for (CrewMember crewMember : crewList) {
-            String text =
-                    crewMember.getName() + " - Level: " +
-                    crewMember.getLevel() + " - XP: " +
-                    crewMember.getExperience() + " / " +
-                    crewMember.getExperienceToNextLevel();
-            displayList.add(text);
-        }
 
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, displayList);
-        crewListView.setAdapter(adapter);
-    }
     private void updateCreditDisplay() {
         int credits = crewDatabase.getCredits();
         textCredits.setText("Credits: " + credits + " (Training costs 100 Credits per time)");
