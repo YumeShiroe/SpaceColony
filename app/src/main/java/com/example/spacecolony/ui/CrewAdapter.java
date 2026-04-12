@@ -16,17 +16,20 @@ public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.CrewViewHolder
     private ArrayList<CrewMember> selectedCrew;
     private OnCrewSelectListener listener;
     private boolean showSelectionButton;
+    private boolean showItemClick;
 
     public interface OnCrewSelectListener {
         void onCrewSelectionChanged();
         void onLimitReached();
+        void onItemClick(CrewMember crewMember);
     }
 
-    public CrewAdapter(ArrayList<CrewMember> crewList, ArrayList<CrewMember> selectedCrew, OnCrewSelectListener listener, boolean showSelectionButton) {
+    public CrewAdapter(ArrayList<CrewMember> crewList, ArrayList<CrewMember> selectedCrew, OnCrewSelectListener listener, boolean showSelectionButton, boolean showItemClick) {
         this.crewList = crewList;
         this.selectedCrew = selectedCrew;
         this.listener = listener;
         this.showSelectionButton = showSelectionButton;
+        this.showItemClick = showItemClick;
     }
 
     @NonNull
@@ -73,6 +76,13 @@ public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.CrewViewHolder
         } else {
             holder.buttonSelect.setVisibility(View.GONE);
             holder.buttonSelect.setOnClickListener(null);
+        }
+        if (showItemClick) {
+            holder.itemView.setOnClickListener(v -> {
+                listener.onItemClick(crewMember);
+            });
+        } else {
+            holder.itemView.setOnClickListener(null);
         }
     }
 

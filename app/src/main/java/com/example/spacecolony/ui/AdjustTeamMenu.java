@@ -62,7 +62,10 @@ public class AdjustTeamMenu extends AppCompatActivity{
             public void onLimitReached() {
                 Toast.makeText(AdjustTeamMenu.this, "You can only select 2 crew members", Toast.LENGTH_SHORT).show();
             }
-        }, true);
+            @Override
+            public void onItemClick(CrewMember crewMember) {
+            }
+        }, true, false);
 
         recyclerView.setAdapter(crewAdapter);
         updateSelectedTeam();

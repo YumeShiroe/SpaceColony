@@ -31,12 +31,14 @@ public class CrewMenu extends AppCompatActivity {
         crewAdapter = new CrewAdapter(crewList, new ArrayList<>(), new CrewAdapter.OnCrewSelectListener() {
             @Override
             public void onCrewSelectionChanged() {
-
             }
+            @Override
             public void onLimitReached() {
-
             }
-        }, false);
+            @Override
+            public void onItemClick(CrewMember crewMember) {
+            }
+        }, false, false);
         crewRecyclerView.setAdapter(crewAdapter);
 
         backButton.setOnClickListener(v -> {
