@@ -2,8 +2,6 @@ package com.example.spacecolony.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.spacecolony.R;

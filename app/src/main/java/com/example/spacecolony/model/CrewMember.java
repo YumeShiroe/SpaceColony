@@ -18,6 +18,8 @@ public abstract class CrewMember {
     protected int shield;
     protected boolean isDead;
     protected int skillCooldown;
+    private int missionWon;
+    private int timesDefeated;
 
     public CrewMember(String name, int maxHealth, int maxEnergy, int attackPower, int defensePower) {
         this.name = name;
@@ -38,6 +40,9 @@ public abstract class CrewMember {
         this.skillCooldown = 0;
 
         this.isDead = false;
+
+        this.missionWon = missionWon;
+        this.timesDefeated = timesDefeated;
     }
 
     public void gainExperience(int amount) {
@@ -141,6 +146,12 @@ public abstract class CrewMember {
     public boolean isDefeated() {
         return isDead || health <= 0;
     }
+    public void recordMissionWon() {
+        missionWon++;
+    }
+    public void recordDefeat() {
+        timesDefeated++;
+    }
 
     // general method for crew member
     public abstract int getHealthGrowth();
@@ -191,6 +202,15 @@ public abstract class CrewMember {
     }
     public int getSKillCooldown() {
         return skillCooldown;
+    }
+    public int getMissionWon() {
+        return missionWon;
+    }
+    public int getTimesDefeated() {
+        return timesDefeated;
+    }
+    public String getStatistics() {
+        return "Wins: " + missionWon + " | Defeats: " + timesDefeated;
     }
 
 

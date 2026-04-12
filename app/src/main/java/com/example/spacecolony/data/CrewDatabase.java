@@ -18,6 +18,9 @@ public class CrewDatabase {
     private static CrewDatabase instance;
     private int credits;
     private int recruitedCount;
+    private int totalCrewRecruit;
+    private int totalMissionWon;
+    private int totalMissionLost;
 
     private String[] possibleNames = {
             "Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Henry", "Ivy", "Jack", "Ethan"
@@ -28,6 +31,9 @@ public class CrewDatabase {
         loadDefaultCrewList();
         credits = 10000;
         recruitedCount = 0;
+        totalCrewRecruit = 0;
+        totalMissionWon = 0;
+        totalMissionLost = 0;
     }
 
     public static CrewDatabase getInstance() {
@@ -112,6 +118,7 @@ public class CrewDatabase {
             crewList.add(newMember);
             credits -= cost;
             recruitedCount++;
+            totalCrewRecruit++;
         }
 
         return newMember;
@@ -172,6 +179,15 @@ public class CrewDatabase {
     public void addCredit(int amount) {
         credits += amount;
     }
+    public void recordCrewRecruit() {
+        totalCrewRecruit++;
+    }
+    public void recordMisionWon() {
+        totalMissionWon++;
+    }
+    public void recordMissionLost() {
+        totalMissionLost++;
+    }
 
     public int getCredits() {
         return credits;
@@ -185,7 +201,22 @@ public class CrewDatabase {
         }
         return 50 + recruitedCount * 50;
     }
+    public int getTotalCrewRecruit() {
+        return totalCrewRecruit;
+    }
+    public int getTotalMissionWon() {
+        return totalMissionWon;
+    }
+    public int getTotalMissionLost() {
+        return totalMissionLost;
+    }
     public boolean isRecruitSoftCapReached() {
         return recruitedCount >= 8;
+    }
+
+    public String getAllStatistic() {
+        return "Total Crew Recruited: " + totalCrewRecruit + "\n" +
+                "Total Mission Won: " + totalMissionWon + "\n" +
+                "Total Mission Lost: " + totalMissionLost;
     }
 }
